@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% block title %}Marktanalyse{% endblock %}
+{% block content %}
+<h1><i class="fas fa-chart-line me-2"></i>Marktanalyse</h1>
+<div class="card mb-4">
+    <div class="card-body">
+        <form method="GET" class="row g-3">
+            <div class="col-md-4">
+                <select class="form-select" name="customer_id">
+                    <option value="">Alle Kunden</option>
+                    {% for c in customers %}<option value="{{ c.id }}">{{ c.name }}</option>{% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4">
+                <select class="form-select" name="product_group">
+                    <option value="">Alle Produktgruppen</option>
+                    {% for pg in product_groups %}<option value="{{ pg }}">{{ pg }}</option>{% endfor %}
+                </select>
+            </div>
+            <div class="col-md-4"><button type="submit" class="btn btn-primary">Filtern</button></div>
+        </form>
+    </div>
+</div>
+{% if sales_data %}
+<div class="card"><div class="card-body"><canvas id="salesChart" height="80"></canvas></div></div>
+{% endif %}
+{% endblock %}
+{% block scripts %}
+<script>
+if (document.getElementById('salesChart')) {
+    new Chart(document.getElementById('salesChart').getContext('2d'), {
+        type: 'line',
+        data: {
+            labels: {{ chart_labels|tojson }},
+            datasets: [{label: 'Umsatz', data: {{ chart_revenue|tojson }}, borderColor: 'rgba(79, 70, 229, 1)'}]
+        }
+    });
+}
+</script>
+{% endblock %}

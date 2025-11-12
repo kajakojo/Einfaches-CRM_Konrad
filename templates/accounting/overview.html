@@ -1,0 +1,190 @@
+{% extends "base.html" %}
+
+{% block title %}Rechnungswesen & Controlling{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h1><i class="fas fa-calculator me-2"></i>Rechnungswesen & Controlling HLW I</h1>
+    <p class="text-muted">Lern- und Analyseplattform für betriebswirtschaftliche Kennzahlen</p>
+</div>
+
+<!-- Statistik-Karten -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card stats-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-1">Bilanzen</h6>
+                        <h2 class="mb-0">{{ stats.balance_sheets }}</h2>
+                        <small class="text-info">Erfasst</small>
+                    </div>
+                    <div class="stat-icon bg-primary">
+                        <i class="fas fa-balance-scale"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stats-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-1">GuV-Rechnungen</h6>
+                        <h2 class="mb-0">{{ stats.income_statements }}</h2>
+                        <small class="text-success">Vorhanden</small>
+                    </div>
+                    <div class="stat-icon bg-success">
+                        <i class="fas fa-file-invoice-dollar"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stats-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-1">Umsatzdaten</h6>
+                        <h2 class="mb-0">{{ stats.sales_records }}</h2>
+                        <small class="text-warning">Datensätze</small>
+                    </div>
+                    <div class="stat-icon bg-warning">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stats-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-1">Kostenstellen</h6>
+                        <h2 class="mb-0">{{ stats.cost_centers }}</h2>
+                        <small class="text-info">Aktiv</small>
+                    </div>
+                    <div class="stat-icon bg-danger">
+                        <i class="fas fa-coins"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Analyse-Module -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-balance-scale me-2"></i>Bilanzanalyse</h5>
+            </div>
+            <div class="card-body">
+                <p>Analyse von Eigenkapitalquote, Liquidität und Verschuldungsgrad mit automatischer Kennzahlenberechnung.</p>
+                <ul class="mb-3">
+                    <li>Eigenkapitalquote & Verschuldungsgrad</li>
+                    <li>Zeitvergleich und Trendanalyse</li>
+                    <li>Automatische Warnungen bei kritischen Werten</li>
+                    <li>Visualisierung mit Balken- und Liniendiagrammen</li>
+                </ul>
+                <a href="{{ url_for('main.balance_sheet_analysis') }}" class="btn btn-primary">
+                    <i class="fas fa-arrow-right me-1"></i>Zur Bilanzanalyse
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-file-invoice-dollar me-2"></i>GuV-Analyse</h5>
+            </div>
+            <div class="card-body">
+                <p>Gewinn- und Verlustrechnung mit Kennzahlen wie Umsatz, Gewinn, Zahllast und Margen.</p>
+                <ul class="mb-3">
+                    <li>Berechnung von Rohgewinn, EBIT und Margen</li>
+                    <li>Umsatzsteuer & Vorsteuer mit Zahllast</li>
+                    <li>Vergleich über mehrere Perioden</li>
+                    <li>Exportfunktion für PDF und Excel</li>
+                </ul>
+                <a href="{{ url_for('main.income_statement_analysis') }}" class="btn btn-success">
+                    <i class="fas fa-arrow-right me-1"></i>Zur GuV-Analyse
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-line me-2"></i>Marktanalyse</h5>
+            </div>
+            <div class="card-body">
+                <p>Analyse von Marktanteilen, Wachstumsraten und Absatzdaten mit interaktiven Filtern.</p>
+                <ul class="mb-3">
+                    <li>Marktanteile und Branchentrends</li>
+                    <li>Umsatzentwicklung nach Produktgruppen</li>
+                    <li>Benchmark-Vergleiche</li>
+                    <li>Interaktive Diagramme und Filter</li>
+                </ul>
+                <a href="{{ url_for('main.market_analysis') }}" class="btn btn-warning">
+                    <i class="fas fa-arrow-right me-1"></i>Zur Marktanalyse
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-coins me-2"></i>Kostenstellencontrolling</h5>
+            </div>
+            <div class="card-body">
+                <p>Controlling von Kostenstellen mit Budget-Ist-Vergleich und Abweichungsanalyse.</p>
+                <ul class="mb-3">
+                    <li>Budget vs. Ist-Kosten Vergleich</li>
+                    <li>Abweichungsanalyse in % und €</li>
+                    <li>Filterfunktionen nach Kostenstelle und Periode</li>
+                    <li>Tabellarische und grafische Darstellung</li>
+                </ul>
+                <a href="{{ url_for('main.cost_centers') }}" class="btn btn-danger">
+                    <i class="fas fa-arrow-right me-1"></i>Zum Controlling
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Lernbereich -->
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-graduation-cap me-2"></i>Grundlagen Rechnungswesen</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h6><i class="fas fa-info-circle me-1"></i>Umsatzsteuer & Vorsteuer</h6>
+                        <p class="small">Die Umsatzsteuer ist eine Steuer auf den Verkauf von Waren/Dienstleistungen (20%, 10%, 13%). Die Vorsteuer kann vom Unternehmen abgezogen werden. Die Differenz ergibt die Zahllast.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h6><i class="fas fa-info-circle me-1"></i>Bilanz</h6>
+                        <p class="small">Die Bilanz zeigt die Vermögenslage eines Unternehmens. Aktiva (Vermögen) = Passiva (Kapital). Wichtige Kennzahlen: Eigenkapitalquote, Liquidität, Verschuldungsgrad.</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h6><i class="fas fa-info-circle me-1"></i>GuV</h6>
+                        <p class="small">Die Gewinn- und Verlustrechnung zeigt Erlöse und Aufwendungen einer Periode. Wichtige Größen: Umsatz, Rohgewinn, EBIT, Jahresüberschuss/-fehlbetrag.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

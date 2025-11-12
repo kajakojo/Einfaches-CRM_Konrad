@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Neue Aufgabe{% endblock %}
+
+{% block content %}
+<h1><i class="fas fa-plus-circle me-2"></i>Neue Aufgabe erstellen</h1>
+
+<div class="card mt-4">
+    <div class="card-body">
+        <form method="POST">
+            <div class="mb-3">
+                <label for="title" class="form-label">Titel *</label>
+                <input type="text" class="form-control" id="title" name="title" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="description" class="form-label">Beschreibung</label>
+                <textarea class="form-control" id="description" name="description" rows="3"></textarea>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label for="project_id" class="form-label">Projekt</label>
+                    <select class="form-select" id="project_id" name="project_id">
+                        <option value="">Projekt auswählen</option>
+                        {% for project in projects %}
+                        <option value="{{ project.id }}">{{ project.project_name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label for="assigned_to" class="form-label">Zugewiesen an</label>
+                    <select class="form-select" id="assigned_to" name="assigned_to">
+                        <option value="">Mitarbeiter auswählen</option>
+                        {% for user in users %}
+                        <option value="{{ user.id }}">{{ user.firstname }} {{ user.lastname }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label for="status" class="form-label">Status</label>
+                    <select class="form-select" id="status" name="status">
+                        <option value="offen" selected>Offen</option>
+                        <option value="in_bearbeitung">In Bearbeitung</option>
+                        <option value="erledigt">Erledigt</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="priority" class="form-label">Priorität</label>
+                    <select class="form-select" id="priority" name="priority">
+                        <option value="niedrig">Niedrig</option>
+                        <option value="mittel" selected>Mittel</option>
+                        <option value="hoch">Hoch</option>
+                    </select>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label for="due_date" class="form-label">Fälligkeitsdatum</label>
+                    <input type="date" class="form-control" id="due_date" name="due_date">
+                </div>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">
+                    <i class="fas fa-save me-1"></i>Aufgabe erstellen
+                </button>
+                <a href="{{ url_for('main.list_tasks') }}" class="btn btn-secondary">
+                    <i class="fas fa-times me-1"></i>Abbrechen
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

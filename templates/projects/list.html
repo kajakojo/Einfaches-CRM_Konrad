@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Projekte{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-project-diagram me-2"></i>Projekte</h1>
+    <a href="{{ url_for('main.create_project') }}" class="btn btn-primary">
+        <i class="fas fa-plus me-1"></i>Neues Projekt
+    </a>
+</div>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<div class="card">
+    <div class="card-body">
+        {% if projects %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Projektname</th>
+                        <th>Kunde</th>
+                        <th>Status</th>
+                        <th>Fortschritt</th>
+                        <th>Startdatum</th>
+                        <th>Enddatum</th>
+                        <th>Aktionen</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for project in projects %}
+                    <tr>
+                        <td><strong>{{ project.project_name }}</strong></td>
+                        <td>{{ project.customer.name if project.customer else 'Kein Kunde' }}</td>
+                        <td>
+                            {% if project.status == 'aktiv' %}
+                            <span class="badge bg-success">{{ project.status }}</span>
+                            {% elif project.status == 'geplant' %}
+                            <span class="badge bg-info">{{ project.status }}</span>
+                            {% elif project.status == 'pausiert' %}
+                            <span class="badge bg-warning">{{ project.status }}</span>
+                            {% else %}
+                            <span class="badge bg-secondary">{{ project.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <div class="progress" style="height: 20px;">
+                                <div class="progress-bar" role="progressbar" style="width: {{ project.progress }}%;" 
+                                     aria-valuenow="{{ project.progress }}" aria-valuemin="0" aria-valuemax="100">
+                                    {{ project.progress }}%
+                                </div>
+                            </div>
+                        </td>
+                        <td>{{ project.start_date.strftime('%d.%m.%Y') if project.start_date else '-' }}</td>
+                        <td>{{ project.end_date.strftime('%d.%m.%Y') if project.end_date else '-' }}</td>
+                        <td>
+                            <a href="{{ url_for('main.view_project', id=project.id) }}" class="btn btn-sm btn-info">
+                                <i class="fas fa-eye"></i> Ansehen
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted">Keine Projekte vorhanden. <a href="{{ url_for('main.create_project') }}">Erstellen Sie Ihr erstes Projekt</a>.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

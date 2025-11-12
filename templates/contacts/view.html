@@ -1,0 +1,97 @@
+{% extends "base.html" %}
+
+{% block title %}Contact #{{ contact.id }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-10 mx-auto">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Contact Record #{{ contact.id }}</h1>
+            <div>
+                <a href="{{ url_for('main.list_contacts') }}" class="btn btn-secondary">
+                    <i class="bi bi-arrow-left"></i> Back to Contacts
+                </a>
+            </div>
+        </div>
+
+        <div class="card mb-4">
+            <div class="card-header bg-primary text-white">
+                <h3 class="mb-0">Contact Details</h3>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><strong>Contact ID:</strong> #{{ contact.id }}</p>
+                        <p><strong>Customer:</strong> 
+                            <a href="{{ url_for('main.view_customer', id=contact.customer.id) }}">
+                                {{ contact.customer.name }}
+                            </a>
+                        </p>
+                        <p><strong>Customer Email:</strong> 
+                            <a href="mailto:{{ contact.customer.email }}">{{ contact.customer.email }}</a>
+                        </p>
+                        <p><strong>Customer Phone:</strong> 
+                            {% if contact.customer.phone %}
+                                <a href="tel:{{ contact.customer.phone }}">{{ contact.customer.phone }}</a>
+                            {% else %}
+                                <span class="text-muted">Not provided</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <p><strong>Contact Type:</strong>
+                            {% if contact.type == 'email' %}
+                                <span class="badge bg-primary fs-6"><i class="bi bi-envelope"></i> Email</span>
+                            {% elif contact.type == 'phone' %}
+                                <span class="badge bg-success fs-6"><i class="bi bi-telephone"></i> Phone Call</span>
+                            {% elif contact.type == 'meeting' %}
+                                <span class="badge bg-info fs-6"><i class="bi bi-calendar"></i> Meeting</span>
+                            {% elif contact.type == 'other' %}
+                                <span class="badge bg-secondary fs-6"><i class="bi bi-chat"></i> Other</span>
+                            {% else %}
+                                <span class="badge bg-secondary fs-6">{{ contact.type }}</span>
+                            {% endif %}
+                        </p>
+                        <p><strong>Date:</strong> 
+                            {{ contact.date.strftime('%d.%m.%Y %H:%M') if contact.date else contact.created_at.strftime('%d.%m.%Y %H:%M') }}
+                        </p>
+                        <p><strong>Logged At:</strong> 
+                            {{ contact.created_at.strftime('%d.%m.%Y %H:%M') }}
+                        </p>
+                    </div>
+                </div>
+
+                <hr>
+                <div>
+                    <h5>Notes:</h5>
+                    <div class="card bg-light">
+                        <div class="card-body">
+                            <p class="mb-0">{{ contact.notes }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <h4 class="mb-0">Actions</h4>
+            </div>
+            <div class="card-body">
+                <div class="d-flex gap-2">
+                    <button class="btn btn-warning" disabled>
+                        <i class="bi bi-pencil"></i> Edit Contact
+                    </button>
+                    <button class="btn btn-danger" disabled>
+                        <i class="bi bi-trash"></i> Delete Contact
+                    </button>
+                    <a href="{{ url_for('main.view_customer', id=contact.customer.id) }}" class="btn btn-info">
+                        <i class="bi bi-person"></i> View Customer
+                    </a>
+                </div>
+                <p class="text-muted mt-2 mb-0"><small>Edit and delete functionality coming soon.</small></p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

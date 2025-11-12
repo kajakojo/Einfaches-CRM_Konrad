@@ -1,0 +1,92 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg
+*.egg-info/
+dist/
+build/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+pip-wheel-metadata/
+share/python-wheels/
+*.manifest
+*.spec
+
+# Virtual Environment
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# Flask
+instance/
+.webassets-cache
+.pytest_cache/
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+app.db
+*.sql
+
+# Environment Variables
+.env
+.env.local
+.env.production
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Logs
+*.log
+logs/
+*.out
+
+# PythonAnywhere specific
+# (Bewahren Sie .pythonanywhere als Vorlage auf, aber nicht mit echten Daten)
+
+# Migrations (optional - entfernen Sie das # wenn Sie migrations/ nicht tracken wollen)
+# migrations/
+
+# Backups
+*.bak
+backup/
+backups/
+*.backup
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# OS
+Thumbs.db
+.DS_Store
+
+# Security
+*.pem
+*.key
+*.cert
+secrets.txt
+
+# Custom
+include.php
+# Hinweis: include.php wird getrackt, aber enthält nur Beispielwerte.
+# Benutzer müssen ihre eigenen Werte eintragen.

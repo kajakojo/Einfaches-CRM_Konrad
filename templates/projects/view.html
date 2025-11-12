@@ -1,0 +1,156 @@
+{% extends "base.html" %}
+
+{% block title %}{{ project.project_name }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-project-diagram me-2"></i>{{ project.project_name }}</h1>
+    <a href="{{ url_for('main.list_projects') }}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-1"></i>Zurück zur Liste
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <h5><i class="fas fa-info-circle me-2"></i>Projektdetails</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong>Status:</strong>
+                        {% if project.status == 'aktiv' %}
+                        <span class="badge bg-success">{{ project.status }}</span>
+                        {% elif project.status == 'geplant' %}
+                        <span class="badge bg-info">{{ project.status }}</span>
+                        {% elif project.status == 'pausiert' %}
+                        <span class="badge bg-warning">{{ project.status }}</span>
+                        {% else %}
+                        <span class="badge bg-secondary">{{ project.status }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Kunde:</strong> {{ project.customer.name if project.customer else 'Kein Kunde' }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong>Startdatum:</strong> {{ project.start_date.strftime('%d.%m.%Y') if project.start_date else '-' }}
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Enddatum:</strong> {{ project.end_date.strftime('%d.%m.%Y') if project.end_date else '-' }}
+                    </div>
+                </div>
+
+                <div class="mb-3">
+                    <strong>Fortschritt:</strong>
+                    <div class="progress mt-2" style="height: 25px;">
+                        <div class="progress-bar" role="progressbar" style="width: {{ project.progress }}%;" 
+                             aria-valuenow="{{ project.progress }}" aria-valuemin="0" aria-valuemax="100">
+                            {{ project.progress }}%
+                        </div>
+                    </div>
+                </div>
+
+                {% if project.description %}
+                <div class="mb-3">
+                    <strong>Beschreibung:</strong>
+                    <p class="mt-2">{{ project.description }}</p>
+                </div>
+                {% endif %}
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <small class="text-muted">Erstellt am: {{ project.created_at.strftime('%d.%m.%Y %H:%M') }}</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5><i class="fas fa-tasks me-2"></i>Aufgaben</h5>
+                <a href="{{ url_for('main.create_task') }}" class="btn btn-sm btn-primary">
+                    <i class="fas fa-plus me-1"></i>Neue Aufgabe
+                </a>
+            </div>
+            <div class="card-body">
+                {% if tasks %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Aufgabe</th>
+                                <th>Zugewiesen an</th>
+                                <th>Status</th>
+                                <th>Priorität</th>
+                                <th>Fällig</th>
+                                <th>Aktionen</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for task in tasks %}
+                            <tr>
+                                <td>{{ task.title }}</td>
+                                <td>{{ task.assignee.firstname }} {{ task.assignee.lastname if task.assignee else '-' }}</td>
+                                <td>
+                                    {% if task.status == 'offen' %}
+                                    <span class="badge bg-secondary">{{ task.status }}</span>
+                                    {% elif task.status == 'in_bearbeitung' %}
+                                    <span class="badge bg-primary">In Bearbeitung</span>
+                                    {% else %}
+                                    <span class="badge bg-success">{{ task.status }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if task.priority == 'hoch' %}
+                                    <span class="badge bg-danger">{{ task.priority }}</span>
+                                    {% elif task.priority == 'mittel' %}
+                                    <span class="badge bg-warning">{{ task.priority }}</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary">{{ task.priority }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ task.due_date.strftime('%d.%m.%Y') if task.due_date else '-' }}</td>
+                                <td>
+                                    <a href="{{ url_for('main.view_task', id=task.id) }}" class="btn btn-sm btn-info">
+                                        <i class="fas fa-eye"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted">Keine Aufgaben für dieses Projekt</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-pie me-2"></i>Statistiken</h5>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <strong>Aufgaben gesamt:</strong> {{ tasks|length }}
+                </div>
+                <div class="mb-3">
+                    <strong>Offene Aufgaben:</strong> {{ tasks|selectattr('status', 'equalto', 'offen')|list|length }}
+                </div>
+                <div class="mb-3">
+                    <strong>In Bearbeitung:</strong> {{ tasks|selectattr('status', 'equalto', 'in_bearbeitung')|list|length }}
+                </div>
+                <div class="mb-3">
+                    <strong>Erledigt:</strong> {{ tasks|selectattr('status', 'equalto', 'erledigt')|list|length }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

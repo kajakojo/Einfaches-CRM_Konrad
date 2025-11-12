@@ -1,0 +1,49 @@
+# PythonAnywhere Konfigurationsvorlage
+# Diese Datei dient als Referenz für die Deployment-Konfiguration
+
+[project]
+name = Einfaches-CRM_Konrad
+python_version = 3.10
+
+[paths]
+# Ersetzen Sie 'IhrBenutzername' mit Ihrem PythonAnywhere-Benutzernamen
+project_home = /home/IhrBenutzername/Einfaches-CRM_Konrad
+virtualenv = /home/IhrBenutzername/.virtualenvs/crm-venv
+static_files = /home/IhrBenutzername/Einfaches-CRM_Konrad/static
+
+[database]
+# MySQL-Datenbank auf PythonAnywhere
+type = mysql
+driver = pymysql
+user = IhrBenutzername
+password = IhrMySQLPasswort
+host = IhrBenutzername.mysql.pythonanywhere-services.com
+port = 3306
+database = IhrBenutzername$crm
+
+# DATABASE_URL Format:
+# mysql+pymysql://IhrBenutzername:IhrMySQLPasswort@IhrBenutzername.mysql.pythonanywhere-services.com/IhrBenutzername$crm
+
+[environment]
+# Generieren Sie einen sicheren Secret Key mit:
+# python -c "import secrets; print(secrets.token_hex(32))"
+SECRET_KEY = generieren-sie-einen-sicheren-key
+FLASK_ENV = production
+DEBUG = False
+
+[wsgi]
+# Das 'application' Objekt muss in der WSGI-Datei verfügbar sein
+application_variable = application
+module = wsgi
+
+[static]
+url = /static/
+directory = /home/IhrBenutzername/Einfaches-CRM_Konrad/static
+
+[notes]
+# Wichtige Hinweise:
+# 1. Das $-Zeichen im Datenbanknamen ist obligatorisch!
+# 2. Installieren Sie pymysql: pip install pymysql
+# 3. Setzen Sie Umgebungsvariablen in der WSGI-Datei, nicht in .env
+# 4. Nach Änderungen immer "Reload" auf der Web-Seite klicken
+# 5. Überprüfen Sie Error Logs bei Problemen

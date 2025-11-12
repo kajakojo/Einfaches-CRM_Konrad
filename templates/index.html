@@ -1,0 +1,268 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="dashboard-header">
+    <h1><i class="fas fa-chart-line me-2"></i>SmartCRM Dashboard</h1>
+    <p class="text-muted">Übersicht über Ihre Geschäftsaktivitäten</p>
+</div>
+
+<!-- Statistik-Karten -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card stats-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-1">Kunden</h6>
+                        <h2 class="mb-0">{{ stats.total_customers }}</h2>
+                        <small class="text-success"><i class="fas fa-arrow-up"></i> Aktiv</small>
+                    </div>
+                    <div class="stat-icon bg-primary">
+                        <i class="fas fa-users"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stats-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-1">Projekte</h6>
+                        <h2 class="mb-0">{{ stats.active_projects }}</h2>
+                        <small class="text-info">{{ stats.total_projects }} gesamt</small>
+                    </div>
+                    <div class="stat-icon bg-success">
+                        <i class="fas fa-project-diagram"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stats-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-1">Aufgaben</h6>
+                        <h2 class="mb-0">{{ stats.open_tasks }}</h2>
+                        <small class="text-warning">{{ stats.overdue_tasks }} überfällig</small>
+                    </div>
+                    <div class="stat-icon bg-warning">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="card stats-card">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h6 class="text-muted mb-1">Umsatz</h6>
+                        <h2 class="mb-0">€{{ stats.total_revenue|default(0)|round(2) }}</h2>
+                        <small class="text-success"><i class="fas fa-arrow-up"></i> +12%</small>
+                    </div>
+                    <div class="stat-icon bg-danger">
+                        <i class="fas fa-euro-sign"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Diagramme -->
+<div class="row mb-4">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-bar me-2"></i>Monatlicher Umsatz</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="revenueChart" height="80"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-pie me-2"></i>Projektstatus</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="projectStatusChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-chart-line me-2"></i>Aktivität (letzte 30 Tage)</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="activityChart" height="60"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Tabellen -->
+<div class="row">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5><i class="fas fa-clipboard-list me-2"></i>Offene Aufgaben</h5>
+                <a href="{{ url_for('main.list_tasks') }}" class="btn btn-sm btn-primary">Alle anzeigen</a>
+            </div>
+            <div class="card-body">
+                {% if recent_tasks %}
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Aufgabe</th>
+                                <th>Projekt</th>
+                                <th>Priorität</th>
+                                <th>Fällig</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for task in recent_tasks %}
+                            <tr>
+                                <td>{{ task.title }}</td>
+                                <td>{{ task.project.project_name if task.project else 'N/A' }}</td>
+                                <td>
+                                    {% if task.priority == 'hoch' %}
+                                    <span class="badge bg-danger">{{ task.priority }}</span>
+                                    {% elif task.priority == 'mittel' %}
+                                    <span class="badge bg-warning">{{ task.priority }}</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary">{{ task.priority }}</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ task.due_date.strftime('%d.%m.%Y') if task.due_date else '-' }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <p class="text-muted">Keine offenen Aufgaben</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5><i class="fas fa-bell me-2"></i>Letzte Aktivitäten</h5>
+                <a href="#" class="btn btn-sm btn-primary">Alle anzeigen</a>
+            </div>
+            <div class="card-body">
+                {% if recent_activities %}
+                <div class="activity-feed">
+                    {% for activity in recent_activities %}
+                    <div class="activity-item">
+                        <div class="activity-icon">
+                            <i class="fas fa-circle"></i>
+                        </div>
+                        <div class="activity-content">
+                            <p class="mb-1"><strong>{{ activity.user.firstname }} {{ activity.user.lastname }}</strong></p>
+                            <p class="mb-0 text-muted small">{{ activity.action }}: {{ activity.details }}</p>
+                            <small class="text-muted">{{ activity.created_at.strftime('%d.%m.%Y %H:%M') }}</small>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <p class="text-muted">Keine Aktivitäten</p>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Umsatz-Diagramm
+const revenueCtx = document.getElementById('revenueChart').getContext('2d');
+const revenueChart = new Chart(revenueCtx, {
+    type: 'bar',
+    data: {
+        labels: {{ chart_data.revenue_labels|tojson }},
+        datasets: [{
+            label: 'Umsatz (€)',
+            data: {{ chart_data.revenue_data|tojson }},
+            backgroundColor: 'rgba(79, 70, 229, 0.8)',
+            borderColor: 'rgba(79, 70, 229, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+
+// Projektstatus-Diagramm
+const projectCtx = document.getElementById('projectStatusChart').getContext('2d');
+const projectChart = new Chart(projectCtx, {
+    type: 'doughnut',
+    data: {
+        labels: {{ chart_data.project_labels|tojson }},
+        datasets: [{
+            data: {{ chart_data.project_data|tojson }},
+            backgroundColor: [
+                'rgba(16, 185, 129, 0.8)',
+                'rgba(79, 70, 229, 0.8)',
+                'rgba(251, 191, 36, 0.8)',
+                'rgba(107, 114, 128, 0.8)'
+            ]
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: true
+    }
+});
+
+// Aktivitäts-Diagramm
+const activityCtx = document.getElementById('activityChart').getContext('2d');
+const activityChart = new Chart(activityCtx, {
+    type: 'line',
+    data: {
+        labels: {{ chart_data.activity_labels|tojson }},
+        datasets: [{
+            label: 'Aktivitäten',
+            data: {{ chart_data.activity_data|tojson }},
+            borderColor: 'rgba(79, 70, 229, 1)',
+            backgroundColor: 'rgba(79, 70, 229, 0.1)',
+            tension: 0.4,
+            fill: true
+        }]
+    },
+    options: {
+        responsive: true,
+        maintainAspectRatio: true,
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

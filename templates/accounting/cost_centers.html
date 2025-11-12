@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Kostenstellencontrolling{% endblock %}
+{% block content %}
+<h1><i class="fas fa-coins me-2"></i>Kostenstellencontrolling</h1>
+<div class="row mb-3">
+    <div class="col-md-4"><div class="card"><div class="card-body"><h6>Budget gesamt</h6><h3>€ {{ "%.2f"|format(total_budget) }}</h3></div></div></div>
+    <div class="col-md-4"><div class="card"><div class="card-body"><h6>Ist-Kosten</h6><h3>€ {{ "%.2f"|format(total_actual) }}</h3></div></div></div>
+    <div class="col-md-4"><div class="card"><div class="card-body"><h6>Abweichung</h6><h3 class="{% if total_variance < 0 %}text-danger{% else %}text-success{% endif %}">€ {{ "%.2f"|format(total_variance) }}</h3></div></div></div>
+</div>
+{% if cost_centers %}
+<div class="card"><div class="card-body"><table class="table"><thead><tr><th>Kostenstelle</th><th>Budget</th><th>Ist</th><th>Abweichung</th></tr></thead><tbody>
+{% for cc in cost_centers %}
+<tr><td>{{ cc.code }} - {{ cc.name }}</td><td>€ {{ "%.2f"|format(cc.budget) }}</td><td>€ {{ "%.2f"|format(cc.actual_costs) }}</td><td class="{% if cc.variance < 0 %}text-danger{% else %}text-success{% endif %}">€ {{ "%.2f"|format(cc.variance) }} ({{ "%.1f"|format(cc.variance_percentage) }}%)</td></tr>
+{% endfor %}
+</tbody></table></div></div>
+{% endif %}
+{% endblock %}

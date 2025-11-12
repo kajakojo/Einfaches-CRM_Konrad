@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+
+{% block title %}{{ task.title }}{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-clipboard-check me-2"></i>{{ task.title }}</h1>
+    <a href="{{ url_for('main.list_tasks') }}" class="btn btn-secondary">
+        <i class="fas fa-arrow-left me-1"></i>Zurück zur Liste
+    </a>
+</div>
+
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-info-circle me-2"></i>Aufgabendetails</h5>
+            </div>
+            <div class="card-body">
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong>Status:</strong>
+                        {% if task.status == 'offen' %}
+                        <span class="badge bg-secondary">{{ task.status }}</span>
+                        {% elif task.status == 'in_bearbeitung' %}
+                        <span class="badge bg-primary">In Bearbeitung</span>
+                        {% else %}
+                        <span class="badge bg-success">{{ task.status }}</span>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Priorität:</strong>
+                        {% if task.priority == 'hoch' %}
+                        <span class="badge bg-danger">{{ task.priority }}</span>
+                        {% elif task.priority == 'mittel' %}
+                        <span class="badge bg-warning">{{ task.priority }}</span>
+                        {% else %}
+                        <span class="badge bg-secondary">{{ task.priority }}</span>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong>Projekt:</strong> {{ task.project.project_name if task.project else 'Kein Projekt' }}
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Zugewiesen an:</strong> {{ task.assignee.firstname }} {{ task.assignee.lastname if task.assignee else 'Nicht zugewiesen' }}
+                    </div>
+                </div>
+
+                <div class="row mb-3">
+                    <div class="col-md-6">
+                        <strong>Fälligkeitsdatum:</strong>
+                        {% if task.due_date %}
+                            {{ task.due_date.strftime('%d.%m.%Y') }}
+                        {% else %}
+                        -
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <strong>Erstellt am:</strong> {{ task.created_at.strftime('%d.%m.%Y %H:%M') }}
+                    </div>
+                </div>
+
+                {% if task.description %}
+                <div class="mb-3">
+                    <strong>Beschreibung:</strong>
+                    <p class="mt-2">{{ task.description }}</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h5><i class="fas fa-cog me-2"></i>Aktionen</h5>
+            </div>
+            <div class="card-body">
+                <div class="d-grid gap-2">
+                    <button class="btn btn-primary" disabled>
+                        <i class="fas fa-edit me-1"></i>Bearbeiten
+                    </button>
+                    <button class="btn btn-success" disabled>
+                        <i class="fas fa-check me-1"></i>Als erledigt markieren
+                    </button>
+                    <button class="btn btn-danger" disabled>
+                        <i class="fas fa-trash me-1"></i>Löschen
+                    </button>
+                </div>
+                <hr>
+                <small class="text-muted">Bearbeiten und Löschen bald verfügbar</small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

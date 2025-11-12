@@ -1,0 +1,60 @@
+{% extends "base.html" %}
+
+{% block title %}Create Contact{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8 mx-auto">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0">Log New Contact</h2>
+            </div>
+            <div class="card-body">
+                <form method="POST" action="{{ url_for('main.create_contact') }}">
+                    <div class="mb-3">
+                        <label for="customer_id" class="form-label">Customer *</label>
+                        <select class="form-select" id="customer_id" name="customer_id" required>
+                            <option value="">Select a customer...</option>
+                            {% for customer in customers %}
+                            <option value="{{ customer.id }}">{{ customer.name }} ({{ customer.email }})</option>
+                            {% endfor %}
+                        </select>
+                        {% if customers|length == 0 %}
+                        <div class="form-text text-danger">
+                            No customers available. <a href="{{ url_for('main.create_customer') }}">Create a customer first</a>.
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="type" class="form-label">Contact Type *</label>
+                        <select class="form-select" id="type" name="type" required>
+                            <option value="">Select type...</option>
+                            <option value="email">📧 Email</option>
+                            <option value="phone">📞 Phone Call</option>
+                            <option value="meeting">📅 Meeting</option>
+                            <option value="other">💬 Other</option>
+                        </select>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="notes" class="form-label">Notes *</label>
+                        <textarea class="form-control" id="notes" name="notes" 
+                                  rows="5" placeholder="What was discussed? What are the next steps?" required></textarea>
+                        <div class="form-text">Document the key points of the interaction.</div>
+                    </div>
+
+                    <div class="d-flex gap-2">
+                        <button type="submit" class="btn btn-primary" {% if customers|length == 0 %}disabled{% endif %}>
+                            <i class="bi bi-check-circle"></i> Log Contact
+                        </button>
+                        <a href="{{ url_for('main.list_contacts') }}" class="btn btn-secondary">
+                            <i class="bi bi-x-circle"></i> Cancel
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

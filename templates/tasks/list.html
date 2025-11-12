@@ -1,0 +1,86 @@
+{% extends "base.html" %}
+
+{% block title %}Aufgaben{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1><i class="fas fa-tasks me-2"></i>Aufgaben</h1>
+    <a href="{{ url_for('main.create_task') }}" class="btn btn-primary">
+        <i class="fas fa-plus me-1"></i>Neue Aufgabe
+    </a>
+</div>
+
+{% with messages = get_flashed_messages() %}
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            </div>
+        {% endfor %}
+    {% endif %}
+{% endwith %}
+
+<div class="card">
+    <div class="card-body">
+        {% if tasks %}
+        <div class="table-responsive">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>Aufgabe</th>
+                        <th>Projekt</th>
+                        <th>Zugewiesen an</th>
+                        <th>Status</th>
+                        <th>Priorität</th>
+                        <th>Fällig</th>
+                        <th>Aktionen</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for task in tasks %}
+                    <tr>
+                        <td><strong>{{ task.title }}</strong></td>
+                        <td>{{ task.project.project_name if task.project else '-' }}</td>
+                        <td>{{ task.assignee.firstname }} {{ task.assignee.lastname if task.assignee else '-' }}</td>
+                        <td>
+                            {% if task.status == 'offen' %}
+                            <span class="badge bg-secondary">{{ task.status }}</span>
+                            {% elif task.status == 'in_bearbeitung' %}
+                            <span class="badge bg-primary">In Bearbeitung</span>
+                            {% else %}
+                            <span class="badge bg-success">{{ task.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if task.priority == 'hoch' %}
+                            <span class="badge bg-danger">{{ task.priority }}</span>
+                            {% elif task.priority == 'mittel' %}
+                            <span class="badge bg-warning">{{ task.priority }}</span>
+                            {% else %}
+                            <span class="badge bg-secondary">{{ task.priority }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            {% if task.due_date %}
+                                {{ task.due_date.strftime('%d.%m.%Y') }}
+                            {% else %}
+                            -
+                            {% endif %}
+                        </td>
+                        <td>
+                            <a href="{{ url_for('main.view_task', id=task.id) }}" class="btn btn-sm btn-info">
+                                <i class="fas fa-eye"></i> Ansehen
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        {% else %}
+        <p class="text-muted">Keine Aufgaben vorhanden. <a href="{{ url_for('main.create_task') }}">Erstellen Sie Ihre erste Aufgabe</a>.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
