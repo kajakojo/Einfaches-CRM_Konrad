@@ -1,5 +1,27 @@
 # 🔧 Troubleshooting: "No module named 'app'" Fehler
 
+> **⚡ QUICK FIX:** Der häufigste Grund ist ein falscher Pfad in der WSGI-Datei!  
+> Öffnen Sie die WSGI-Datei und prüfen Sie die `project_home` Variable.
+
+## 🎯 Schnelle Diagnose (2 Minuten)
+
+**Schritt 1: Prüfe Error Log auf PythonAnywhere**
+1. Gehe zu **Web** Tab
+2. Klicke auf **Error log**
+3. Scrolle nach unten zu den neuesten Einträgen
+4. Suche nach der diagnostischen Ausgabe (beginnt mit "=" Linien)
+
+**Schritt 2: Was sagt das Diagnose-Output?**
+
+| Diagnose-Meldung | Problem | Lösung |
+|-----------------|---------|---------|
+| `✅ App folder found` | Alles OK mit Pfad | Anderes Problem - siehe unten |
+| `❌ App folder NOT FOUND` | Pfad falsch | → Siehe Abschnitt 3 unten |
+| `❌ Project directory does not exist` | Projekt nicht hochgeladen | → Siehe Abschnitt 1 unten |
+| `⚠️ Configured path does not exist` | Pfad-Tippfehler | → Siehe Abschnitt 3 unten |
+
+---
+
 ## Problem
 ```
 ModuleNotFoundError: No module named 'app'
@@ -241,6 +263,52 @@ application = create_app()
 ```
 
 ## 🆘 Immer noch Fehler?
+
+### Neue Diagnose-Features (ab Version 2.0)
+
+**Die WSGI-Dateien in diesem Projekt enthalten jetzt automatische Diagnostik!**
+
+Wenn Sie die aktualisierte WSGI-Datei verwenden, sehen Sie im Error Log:
+- ✅ Welcher Pfad konfiguriert ist
+- ✅ Ob das Projektverzeichnis existiert
+- ✅ Ob der app Ordner gefunden wurde
+- ✅ Welche Dateien im Projekt vorhanden sind
+- ✅ Python sys.path Einträge
+
+**So nutzen Sie die Diagnostik:**
+1. Kopieren Sie den Inhalt von `kajetankonrad_pythonanywhere_com_wsgi.py` in Ihre WSGI-Datei
+2. Passen Sie NUR die `project_home` Variable an (Zeile 14)
+3. Reload Ihrer Web App
+4. Öffnen Sie das Error Log
+5. Die Diagnose zeigt Ihnen GENAU wo das Problem ist!
+
+**Beispiel Error Log Output:**
+```
+======================================================================
+🔧 PYTHONANYWHERE WSGI DIAGNOSTICS
+======================================================================
+📁 Project home: /home/kajetankonrad/Einfaches-CRM_Konrad
+✓  Project exists: True
+🐍 Python version: 3.10.x
+📌 Current working directory: /var/www
+
+📂 Files in project directory:
+   [DIR]  app/
+   [DIR]  static/
+   [DIR]  templates/
+   [FILE] config.py
+   [FILE] requirements.txt
+   
+📦 App folder check:
+   Path: /home/kajetankonrad/Einfaches-CRM_Konrad/app
+   Exists: True
+   ✅ App folder found!
+======================================================================
+```
+
+---
+
+## 🆘 Weitere Hilfe benötigt?
 
 **Schicke mir diese Informationen:**
 

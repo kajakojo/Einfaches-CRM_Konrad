@@ -118,9 +118,13 @@ Die Anwendung ist dann verfügbar unter: **http://localhost:5000**
 
 ## 🚀 Deployment auf PythonAnywhere
 
-Für eine **detaillierte Schritt-für-Schritt-Anleitung** zum Deployment auf PythonAnywhere, siehe:
+**✨ NEU: Schnellstart-Anleitung verfügbar!**
 
-📄 **[PYTHONANYWHERE_DEPLOYMENT.md](PYTHONANYWHERE_DEPLOYMENT.md)**
+### 📖 Dokumentation:
+
+- **🚀 Schnellstart (15-20 min):** [PYTHONANYWHERE_QUICKSTART.md](PYTHONANYWHERE_QUICKSTART.md)
+- **📘 Detaillierte Anleitung:** [PYTHONANYWHERE_DEPLOYMENT.md](PYTHONANYWHERE_DEPLOYMENT.md)
+- **🔧 Fehlerbehebung:** [TROUBLESHOOTING_PYTHONANYWHERE.md](TROUBLESHOOTING_PYTHONANYWHERE.md)
 
 ### Schnellübersicht:
 
@@ -131,16 +135,18 @@ Für eine **detaillierte Schritt-für-Schritt-Anleitung** zum Deployment auf Pyt
    ```bash
    mkvirtualenv --python=/usr/bin/python3.10 crm-venv
    pip install -r requirements.txt
-   pip install pymysql
    ```
 5. **Web-App konfigurieren** (Manual configuration, Python 3.10)
-6. **WSGI-Datei anpassen** (siehe `wsgi.py` im Projekt)
-7. **Datenbank initialisieren**
+6. **WSGI-Datei anpassen** - Verwenden Sie `kajetankonrad_pythonanywhere_com_wsgi.py` als Vorlage
+7. **Datenbank initialisieren:** `python init_db.py`
 8. **Web-App reloaden**
 
-**Wichtig:** Die komplette Anleitung mit allen Details finden Sie in `PYTHONANYWHERE_DEPLOYMENT.md`!
+**✨ Die WSGI-Dateien enthalten jetzt automatische Diagnostik!**  
+Bei Problemen zeigt das Error Log genau was fehlt.
 
-## Deploying to PythonAnywhere
+---
+
+## Deploying to PythonAnywhere (English)
 
 1. Create a PythonAnywhere account at https://www.pythonanywhere.com
 
