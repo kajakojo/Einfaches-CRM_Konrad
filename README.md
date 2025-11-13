@@ -1,39 +1,75 @@
-# CRM System
+# CRM System# CRM System
 
-Einfaches Customer Relationship Management System mit Flask und MySQL.
 
-**Live Demo:** [kajetankonrad.pythonanywhere.com](https://kajetankonrad.pythonanywhere.com)
 
----
+**Live:** [kajetankonrad.pythonanywhere.com](https://kajetankonrad.pythonanywhere.com)Einfaches Customer Relationship Management System mit Flask und MySQL.
 
-## 🚀 In 5 Minuten online hosten (PythonAnywhere)
 
-### 1. Account erstellen
-- Gehe zu [pythonanywhere.com](https://www.pythonanywhere.com) → Kostenlosen Account erstellen
 
-### 2. Datenbank erstellen
-- Tab **"Databases"** → MySQL Passwort setzen → Datenbank `username$default` erstellen
+## Hosting (PythonAnywhere)**Live Demo:** [kajetankonrad.pythonanywhere.com](https://kajetankonrad.pythonanywhere.com)
 
-### 3. Code hochladen
-Bash Console öffnen:
-```bash
+
+
+**1.** [pythonanywhere.com](https://www.pythonanywhere.com) → Account erstellen---
+
+
+
+**2.** Tab "Databases" → MySQL Passwort → Datenbank `username$default`## 🚀 In 5 Minuten online hosten (PythonAnywhere)
+
+
+
+**3.** Bash Console:### 1. Account erstellen
+
+```bash- Gehe zu [pythonanywhere.com](https://www.pythonanywhere.com) → Kostenlosen Account erstellen
+
 git clone https://github.com/kajakojo/Einfaches-CRM_Konrad.git crmproject
-cd crmproject
-pip3.13 install --user -r requirements.txt
+
+cd crmproject### 2. Datenbank erstellen
+
+pip3.13 install --user -r requirements.txt- Tab **"Databases"** → MySQL Passwort setzen → Datenbank `username$default` erstellen
+
 ```
 
-### 4. Web App einrichten
-- Tab **"Web"** → "Add a new web app" → **Manual Configuration** → **Python 3.13**
+### 3. Code hochladen
 
-### 5. WSGI Datei anpassen
-WSGI configuration file öffnen, alles löschen und einfügen:
+**4.** Tab "Web" → "Add new" → Manual Config → Python 3.13Bash Console öffnen:
 
-```python
-import sys, os
-project_home = '/home/USERNAME/crmproject'
+```bash
+
+**5.** WSGI File (alles löschen, einfügen):git clone https://github.com/kajakojo/Einfaches-CRM_Konrad.git crmproject
+
+```pythoncd crmproject
+
+import sys, ospip3.13 install --user -r requirements.txt
+
+project_home = '/home/USERNAME/crmproject'```
+
 sys.path.insert(0, project_home)
 
-os.environ['SECRET_KEY'] = 'irgendeinlangertext123'
+os.environ['SECRET_KEY'] = 'irgendeinlangertext123'### 4. Web App einrichten
+
+os.environ['DATABASE_URL'] = 'mysql+pymysql://USERNAME:PASSWORT@USERNAME.mysql.pythonanywhere-services.com/USERNAME$default'- Tab **"Web"** → "Add a new web app" → **Manual Configuration** → **Python 3.13**
+
+from app import create_app
+
+application = create_app()### 5. WSGI Datei anpassen
+
+```WSGI configuration file öffnen, alles löschen und einfügen:
+
+Ersetze `USERNAME` (3x) + `PASSWORT`
+
+```python
+
+**6.** Reload → Fertig! 🎉import sys, os
+
+project_home = '/home/USERNAME/crmproject'
+
+---sys.path.insert(0, project_home)
+
+
+
+Kajetan Konrad - TGM Wienos.environ['SECRET_KEY'] = 'irgendeinlangertext123'
+
 os.environ['DATABASE_URL'] = 'mysql+pymysql://USERNAME:PASSWORT@USERNAME.mysql.pythonanywhere-services.com/USERNAME$default'
 
 from app import create_app
