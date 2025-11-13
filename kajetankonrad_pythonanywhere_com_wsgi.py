@@ -27,7 +27,8 @@ os.environ['FLASK_ENV'] = 'production'
 os.environ['DEBUG'] = 'False'
 
 # MySQL Database Connection
-os.environ['DATABASE_URL'] = 'mysql+pymysql://kajetankonrad:s4L5r7ploz9mt7@kajetankonrad.mysql.pythonanywhere-services.com/kajetankonrad$crm'
+# Using the existing 'default' database
+os.environ['DATABASE_URL'] = 'mysql+pymysql://kajetankonrad:s4L5r7ploz9mt7@kajetankonrad.mysql.pythonanywhere-services.com/kajetankonrad$default'
 
 # Alternativ können Sie auch einzelne DB-Parameter setzen:
 # os.environ['DB_TYPE'] = 'mysql'
