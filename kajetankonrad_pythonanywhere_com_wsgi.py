@@ -1,44 +1,19 @@
 # +++++++++++ FLASK +++++++++++
-# Flask works like any other WSGI-compatible framework, we just need
-# to import the application.  Often Flask apps are called "app" so we
-# may need to rename it during the import:
+# WSGI Configuration for PythonAnywhere
+# This file loads the Flask CRM application
 
 import sys
 import os
 
 # ===================================================================
-# PFAD-KONFIGURATION
+# PATH CONFIGURATION
 # ===================================================================
-# Pfad zu Ihrem Projekt auf PythonAnywhere
-# WICHTIG: Passen Sie diesen Pfad an, wo Ihre Dateien tatsächlich liegen!
-project_home = '/home/kajetankonrad/Einfaches-CRM_Konrad'
+# IMPORTANT: This must point to where your project files are located
+project_home = '/home/kajetankonrad/crmproject'
 
-# Debugging: Prüfen ob der Pfad existiert
-if not os.path.exists(project_home):
-    # Versuche alternative Pfade
-    alternative_paths = [
-        '/home/kajetankonrad/mysite',
-        '/home/kajetankonrad/einfaches-crm_konrad',
-        '/home/kajetankonrad',
-    ]
-    for alt_path in alternative_paths:
-        if os.path.exists(alt_path) and os.path.exists(os.path.join(alt_path, 'app')):
-            project_home = alt_path
-            break
-
-# Fügen Sie das Projektverzeichnis zum Python-Pfad hinzu
+# Add project directory to Python path
 if project_home not in sys.path:
     sys.path.insert(0, project_home)
-
-# Debugging: Zeige verfügbare Dateien im Error Log
-print(f"Project home: {project_home}")
-print(f"Project exists: {os.path.exists(project_home)}")
-if os.path.exists(project_home):
-    print(f"Files in project: {os.listdir(project_home)}")
-    app_path = os.path.join(project_home, 'app')
-    print(f"App folder exists: {os.path.exists(app_path)}")
-    if os.path.exists(app_path):
-        print(f"Files in app: {os.listdir(app_path)}")
 
 # ===================================================================
 # UMGEBUNGSVARIABLEN

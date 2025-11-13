@@ -1,0 +1,45 @@
+## 🎯 COPY-PASTE THESE COMMANDS INTO PYTHONANYWHERE BASH CONSOLE
+
+# 1. Pull latest code
+cd /home/kajetankonrad/crmproject && git pull origin main
+
+# 2. Verify app folder exists
+ls -la /home/kajetankonrad/crmproject/app/
+
+# 3. Create and activate virtualenv
+mkvirtualenv --python=/usr/bin/python3.10 crm-env
+
+# 4. Make sure you're in the virtualenv, then install packages
+workon crm-env && cd /home/kajetankonrad/crmproject && pip install -r requirements.txt
+
+# 5. Test if Flask app loads
+python3 -c "import sys; sys.path.insert(0, '/home/kajetankonrad/crmproject'); from app import create_app; app = create_app(); print('✓✓✓ SUCCESS - App loaded correctly! ✓✓✓')"
+
+## ✅ IF ALL COMMANDS SUCCEEDED:
+
+Go to PythonAnywhere Web Tab and:
+
+1. **WSGI Configuration File:**
+   - Click on the WSGI file link
+   - Make sure line says: project_home = '/home/kajetankonrad/crmproject'
+   - Update your MySQL password in DATABASE_URL
+   - Update SECRET_KEY to a random string
+   - Save
+
+2. **Virtualenv:**
+   - Set to: /home/kajetankonrad/.virtualenvs/crm-env
+
+3. **Static Files:**
+   - URL: /static/
+   - Directory: /home/kajetankonrad/crmproject/static
+
+4. **Reload:**
+   - Click the green "Reload" button
+
+5. **Test:**
+   - Visit: https://kajetankonrad.pythonanywhere.com
+
+## ❌ IF YOU GET ERRORS:
+
+Run this to see the error log:
+tail -n 50 /var/log/kajetankonrad.pythonanywhere.com.error.log
