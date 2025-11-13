@@ -18,19 +18,16 @@ if project_home not in sys.path:
 # ===================================================================
 # UMGEBUNGSVARIABLEN
 # ===================================================================
-# WICHTIG: Ändern Sie diese Werte für die Produktion!
 
-# Flask Secret Key - ÄNDERN SIE DIES IN EINEN SICHEREN WERT!
-os.environ['SECRET_KEY'] = 'pythonanywhere-prod-key-BITTE-AENDERN-' + os.urandom(24).hex()
+# Flask Secret Key - Secure random key
+os.environ['SECRET_KEY'] = 'k9mP2xL8nQ5vR3wF7tY4uH6jB1dC0eA9sG2iN5oV8pM4qZ7rX3hK6fW1yT0bJ5'
 
 # Flask Environment
 os.environ['FLASK_ENV'] = 'production'
 os.environ['DEBUG'] = 'False'
 
-# MySQL-Datenbank auf PythonAnywhere
-# Format: mysql+pymysql://benutzername:passwort@server/benutzername$datenbankname
-# WICHTIG: Ersetzen Sie 'IhrMySQLPasswort' mit Ihrem echten MySQL-Passwort!
-os.environ['DATABASE_URL'] = 'mysql+pymysql://kajetankonrad:IhrMySQLPasswort@kajetankonrad.mysql.pythonanywhere-services.com/kajetankonrad$crm'
+# MySQL Database Connection
+os.environ['DATABASE_URL'] = 'mysql+pymysql://kajetankonrad:s4L5r7ploz9mt7@kajetankonrad.mysql.pythonanywhere-services.com/kajetankonrad$crm'
 
 # Alternativ können Sie auch einzelne DB-Parameter setzen:
 # os.environ['DB_TYPE'] = 'mysql'

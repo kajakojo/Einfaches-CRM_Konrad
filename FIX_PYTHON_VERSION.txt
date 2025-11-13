@@ -1,0 +1,26 @@
+## 🔧 FIX PYTHON VERSION - Run in PythonAnywhere Bash Console
+
+# 1. Remove old virtualenv with wrong Python version
+rmvirtualenv crm-env
+
+# 2. Create new virtualenv with Python 3.13
+mkvirtualenv --python=/usr/bin/python3.13 crm-env
+
+# 3. Activate it
+workon crm-env
+
+# 4. Install requirements
+cd /home/kajetankonrad/crmproject
+pip install -r requirements.txt
+
+# 5. Verify Python version
+python --version
+
+# Expected output: Python 3.13.x
+
+# 6. Test app import
+python3 -c "import sys; sys.path.insert(0, '/home/kajetankonrad/crmproject'); from app import create_app; app = create_app(); print('✓ SUCCESS - App loaded!')"
+
+## NOW GO TO WEB TAB:
+# Make sure Virtualenv path is: /home/kajetankonrad/.virtualenvs/crm-env
+# Then click RELOAD
