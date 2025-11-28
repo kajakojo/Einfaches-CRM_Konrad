@@ -184,11 +184,15 @@ def list_tasks():
 @bp.route('/tasks/create', methods=['GET', 'POST'])
 def create_task():
     if request.method == 'POST':
+        # Leere Strings in None umwandeln für Foreign Keys
+        assigned_to = request.form.get('assigned_to')
+        project_id = request.form.get('project_id')
+        
         task = Task(
             title=request.form['title'],
             description=request.form.get('description'),
-            project_id=request.form.get('project_id'),
-            assigned_to=request.form.get('assigned_to'),
+            project_id=int(project_id) if project_id and project_id.strip() else None,
+            assigned_to=int(assigned_to) if assigned_to and assigned_to.strip() else None,
             priority=request.form.get('priority', 'mittel'),
             status=request.form.get('status', 'offen'),
             due_date=datetime.strptime(request.form['due_date'], '%Y-%m-%d') if request.form.get('due_date') else None
