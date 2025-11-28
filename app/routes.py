@@ -100,15 +100,23 @@ def list_orders():
 @bp.route('/orders/create', methods=['GET', 'POST'])
 def create_order():
     if request.method == 'POST':
+        # customer_id muss Integer sein (kommt als String vom Formular)
+        customer_id_str = request.form.get('customer_id', '').strip()
+        
+        if not customer_id_str or not customer_id_str.isdigit():
+            flash('Bitte wählen Sie einen gültigen Kunden aus!', 'error')
+            customers = Customer.query.all()
+            return render_template('orders/create.html', customers=customers)
+        
         order = Order(
-            customer_id=request.form['customer_id'],
+            customer_id=int(customer_id_str),
             total=float(request.form['total']),
-            description=request.form['description'],
-            status=request.form['status']
+            description=request.form.get('description', ''),
+            status=request.form.get('status', 'pending')
         )
         db.session.add(order)
         db.session.commit()
-        flash('Order created successfully!')
+        flash('Bestellung erfolgreich erstellt!')
         return redirect(url_for('main.list_orders'))
     customers = Customer.query.all()
     return render_template('orders/create.html', customers=customers)
@@ -184,15 +192,19 @@ def list_tasks():
 @bp.route('/tasks/create', methods=['GET', 'POST'])
 def create_task():
     if request.method == 'POST':
-        # Leere Strings in None umwandeln für Foreign Keys
-        assigned_to = request.form.get('assigned_to')
-        project_id = request.form.get('project_id')
+        # Sichere Konvertierung von Foreign Keys: leere Strings → None
+        assigned_to = request.form.get('assigned_to', '').strip()
+        project_id = request.form.get('project_id', '').strip()
+        
+        # Nur wenn Wert vorhanden UND numerisch, dann zu Integer konvertieren, sonst None
+        assigned_to_id = int(assigned_to) if assigned_to and assigned_to.isdigit() else None
+        project_id_int = int(project_id) if project_id and project_id.isdigit() else None
         
         task = Task(
             title=request.form['title'],
             description=request.form.get('description'),
-            project_id=int(project_id) if project_id and project_id.strip() else None,
-            assigned_to=int(assigned_to) if assigned_to and assigned_to.strip() else None,
+            project_id=project_id_int,
+            assigned_to=assigned_to_id,
             priority=request.form.get('priority', 'mittel'),
             status=request.form.get('status', 'offen'),
             due_date=datetime.strptime(request.form['due_date'], '%Y-%m-%d') if request.form.get('due_date') else None

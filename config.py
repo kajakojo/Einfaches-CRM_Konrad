@@ -31,6 +31,14 @@ class Config:
     # SQLAlchemy-Konfiguration
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
+    # MySQL Connection Pool Einstellungen (verhindert "Lost connection" Fehler)
+    SQLALCHEMY_ENGINE_OPTIONS = {
+        'pool_recycle': 280,  # Recycel Verbindungen nach 280 Sekunden (PythonAnywhere Timeout ist 300s)
+        'pool_pre_ping': True,  # Teste Verbindung vor Nutzung
+        'pool_size': 10,  # Maximale Anzahl permanenter Verbindungen
+        'max_overflow': 20  # Maximale Anzahl zusätzlicher Verbindungen
+    }
+    
     # Datenbank-URI Konstruktion
     @staticmethod
     def get_database_uri():
