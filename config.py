@@ -32,12 +32,19 @@ class Config:
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     
     # MySQL Connection Pool Einstellungen (verhindert "Lost connection" Fehler)
-    SQLALCHEMY_ENGINE_OPTIONS = {
-        'pool_recycle': 280,  # Recycel Verbindungen nach 280 Sekunden (PythonAnywhere Timeout ist 300s)
-        'pool_pre_ping': True,  # Teste Verbindung vor Nutzung
-        'pool_size': 10,  # Maximale Anzahl permanenter Verbindungen
-        'max_overflow': 20  # Maximale Anzahl zusätzlicher Verbindungen
-    }
+    # Nur für MySQL/PostgreSQL - SQLite unterstützt kein Connection Pooling
+    @staticmethod
+    def get_engine_options():
+        """Gibt Engine-Optionen basierend auf dem Datenbanktyp zurück"""
+        database_url = os.getenv('DATABASE_URL', '')
+        if database_url and 'mysql' in database_url:
+            return {
+                'pool_recycle': 280,  # Recycel Verbindungen nach 280 Sekunden (PythonAnywhere Timeout ist 300s)
+                'pool_pre_ping': True,  # Teste Verbindung vor Nutzung
+                'pool_size': 10,  # Maximale Anzahl permanenter Verbindungen
+                'max_overflow': 20  # Maximale Anzahl zusätzlicher Verbindungen
+            }
+        return {}
     
     # Datenbank-URI Konstruktion
     @staticmethod
@@ -87,3 +94,6 @@ class Config:
     
     # Setze die SQLALCHEMY_DATABASE_URI
     SQLALCHEMY_DATABASE_URI = get_database_uri.__func__()
+    
+    # Setze Engine-Optionen basierend auf Datenbanktyp
+    SQLALCHEMY_ENGINE_OPTIONS = get_engine_options.__func__()
