@@ -91,6 +91,22 @@ def view_customer(id):
     customer = Customer.query.get_or_404(id)
     return render_template('customers/view.html', customer=customer)
 
+@bp.route('/customers/<int:id>/delete', methods=['POST'])
+def delete_customer(id):
+    customer = Customer.query.get_or_404(id)
+    customer_name = customer.name
+    
+    # Delete all related records first to avoid foreign key constraint errors
+    Order.query.filter_by(customer_id=id).delete()
+    Contact.query.filter_by(customer_id=id).delete()
+    Project.query.filter_by(customer_id=id).delete()
+    
+    # Now delete the customer
+    db.session.delete(customer)
+    db.session.commit()
+    flash(f'Customer "{customer_name}" has been deleted successfully!')
+    return redirect(url_for('main.list_customers'))
+
 # Order routes
 @bp.route('/orders')
 def list_orders():
